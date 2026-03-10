@@ -7,6 +7,7 @@ const loginController = async (payload) => {
         headers: {
             'Content-Type': 'application/json'
         },
+        cache: 'no-store',
         body: JSON.stringify(payload)
     });
 
@@ -26,6 +27,7 @@ const registerController = async (payload) => {
         headers: {
             'Content-Type': 'application/json'
         },
+        cache: 'no-store',
         body: JSON.stringify(payload)
     });
 
