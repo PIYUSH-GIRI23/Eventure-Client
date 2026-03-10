@@ -3,7 +3,7 @@ import { combineReducers } from "redux";
 import { persistMiddleware, loadPersistedState } from "./persistMiddleware";
 
 import colorschemeReducer from "./slices/colorschemeSlice";
-import userDataReducer from "./slices/userDataSlice";
+import userDataReducer from "./slices/userdataSlice";
 
 const appReducer = combineReducers({
   colorscheme: colorschemeReducer,
