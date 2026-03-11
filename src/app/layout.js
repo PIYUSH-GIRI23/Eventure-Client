@@ -1,5 +1,7 @@
 import "./globals.css";
 import Providers from "@/app/state/providers";
+import HeaderContainer from "@/app/components/header/HeaderContainer";
+import FooterContainer from "@/app/components/footer/FooterContainer";
 
 export const metadata = {
   title: "Eventure AI",
@@ -11,7 +13,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Providers>
-          {children}
+          <main className="min-h-screen flex flex-col">
+            <HeaderContainer />
+            <div className="flex-1">{children}</div>
+            <FooterContainer />
+          </main>
         </Providers>
       </body>
     </html>
