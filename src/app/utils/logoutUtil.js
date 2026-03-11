@@ -1,6 +1,5 @@
 import { store } from "@/app/state/store";
 import { logout } from "@/app/state/slices/userdataSlice";
-import { setRefreshDate } from "@/app/state/slices/modalSlice";
 
 export const performLogout = () => {
   try {
