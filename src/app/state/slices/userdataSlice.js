@@ -7,6 +7,7 @@ const initialState = {
     contact : '',
     firstName : '',
     lastName : '',
+    username : '',
     lastLogin : null,
     dateOfJoining : null,
     dateOfBirth : null, 
@@ -24,6 +25,7 @@ const userdataSlice = createSlice({
             state.contact = action.payload.contact;
             state.firstName = action.payload.firstName;
             state.lastName = action.payload.lastName;
+            state.username = action.payload.username;
             state.lastLogin = action.payload.lastLogin;
             state.dateOfJoining = action.payload.dateOfJoining;
             state.dateOfBirth = action.payload.dateOfBirth;
@@ -37,6 +39,7 @@ const userdataSlice = createSlice({
             state.contact = '';
             state.firstName = '';
             state.lastName = '';
+            state.username = '';
             state.lastLogin = null;
             state.dateOfJoining = null;
             state.dateOfBirth = null; 

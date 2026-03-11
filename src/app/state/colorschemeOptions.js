@@ -1,7 +1,7 @@
 const colorSchemeOptions = [
     {
         id: 1,
-        name: "White",
+        name: "Light Theme",
         bgColor: "#FFFFFF",
         divColor: "#F5F5F5",
         divColor2: "#E8E8E8",
