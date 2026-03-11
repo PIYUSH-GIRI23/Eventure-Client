@@ -236,6 +236,7 @@ export const useRegister = () => {
           country: user.country,
           city: user.city,
           pinCode: user.pinCode,
+          username: user.username,
         })
       )
 

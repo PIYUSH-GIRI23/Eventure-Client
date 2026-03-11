@@ -120,6 +120,7 @@ export const useLogin = () => {
           contact: user.contact,
           firstName: user.firstName,
           lastName: user.lastName,
+          username: user.username,
           lastLogin: user.lastLogin,
           dateOfJoining: user.dateOfJoining,
           dateOfBirth: user.dateOfBirth,

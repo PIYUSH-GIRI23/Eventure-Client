@@ -20,7 +20,7 @@ const RegisterView = ({
   return (
     <>
       {loading && <LoadingSpinner />}
-      <div className="flex min-h-screen items-center justify-center px-4 py-8 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 lg:bg-white">
+      <div className="flex min-h-screen items-center justify-center px-4 py-8 bg-linear-to-br from-emerald-50 via-teal-50 to-cyan-50 lg:bg-white">
         <div className="w-full max-w-md rounded-2xl border border-zinc-200 bg-white p-6 text-black shadow-sm">
           <div className="mb-3">
             <Link
@@ -33,7 +33,7 @@ const RegisterView = ({
 
           <div className="mb-6 flex items-center justify-center gap-2">
             <Link href="/" className="flex items-center gap-2">
-              <span className="hidden sm:block text-2xl font-bold bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">
+              <span className="hidden sm:block text-2xl font-bold bg-linear-to-r from-emerald-500 via-teal-500 to-cyan-500 bg-clip-text text-transparent">
                 Eventure AI
               </span>
             </Link>
@@ -49,7 +49,7 @@ const RegisterView = ({
           {/* Progress bar */}
           <div className="mb-6 h-2 w-full bg-zinc-200 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-300"
+              className="h-full bg-linear-to-r from-emerald-500 to-teal-500 transition-all duration-300"
               style={{ width: `${(currentStep / 2) * 100}%` }}
             ></div>
           </div>
@@ -303,7 +303,7 @@ const RegisterView = ({
                 disabled={loading}
                 className={`flex-1 cursor-pointer rounded-lg py-2 text-sm font-medium transition
                   ${loading ? "cursor-not-allowed opacity-60" : "hover:opacity-90"}
-                  bg-gradient-to-r from-emerald-500 to-teal-500 text-white`}
+                  bg-linear-to-r from-emerald-500 to-teal-500 text-white`}
               >
                 {loading ? (currentStep === 1 ? "Loading..." : "Creating account...") : (currentStep === 1 ? "Next" : "Sign Up")}
               </button>
