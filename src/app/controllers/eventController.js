@@ -1,0 +1,248 @@
+import {env} from '@/app/init/env';
+
+const getAllEvents = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const url = env.serverUrl + env.eventRoutes.getAllEvents;
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const getSpecificEvent = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const eventId = payload.eventId;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const url = env.serverUrl + env.eventRoutes.specificEvent + `/${eventId}`;
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const rateEvent = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const { access_token: _, refresh_token: __, ...bodyData } = payload;
+    const url = env.serverUrl + env.eventRoutes.rateEvent;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        body: JSON.stringify(bodyData),
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const derateEvent = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const { access_token: _, refresh_token: __, ...bodyData } = payload;
+    const url = env.serverUrl + env.eventRoutes.derateEvent;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        body: JSON.stringify(bodyData),
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const bookmarkEvent = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const { access_token: _, refresh_token: __, ...bodyData } = payload;
+    const url = env.serverUrl + env.eventRoutes.bookmarkEvent;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        body: JSON.stringify(bodyData),
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const debookmarkEvent = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const { access_token: _, refresh_token: __, ...bodyData } = payload;
+    const url = env.serverUrl + env.eventRoutes.debookmarkEvent;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        body: JSON.stringify(bodyData),
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const eventsController = {
+    getAllEvents,
+    getSpecificEvent,
+    rateEvent,
+    derateEvent,
+    bookmarkEvent,
+    debookmarkEvent
+}
+export default eventsController;
