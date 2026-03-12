@@ -48,6 +48,22 @@ const HeaderView = ({
                             >
                                 {type === "manager" ? "Created Events" : "Registered Events"}
                             </Link>
+
+                            <Link
+                                href="/hotpicks"
+                                className="px-2 py-1 rounded hover:opacity-80"
+                                style={{ color: activeTheme.textColor }}
+                            >
+                                Bookmarked Events
+                            </Link>
+
+                            <Link
+                                href="/hotpicks"
+                                className="px-2 py-1 rounded hover:opacity-80"
+                                style={{ color: activeTheme.textColor }}
+                            >
+                                Liked Events
+                            </Link>
                         </>
                     )}
                 </div>
