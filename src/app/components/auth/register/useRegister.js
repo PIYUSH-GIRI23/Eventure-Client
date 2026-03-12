@@ -214,13 +214,12 @@ export const useRegister = () => {
       }
 
       const { tokens, user } = res.data
-
       // Store tokens in localStorage
-      if (tokens.accessToken) {
-        localStorage.setItem("access_token", tokens.accessToken)
+      if (tokens.access_token) {
+        localStorage.setItem("access_token", tokens.access_token)
       }
-      if (tokens.refreshToken) {
-        localStorage.setItem("refresh_token", tokens.refreshToken)
+      if (tokens.refresh_token) {
+        localStorage.setItem("refresh_token", tokens.refresh_token)
       }
 
       // Dispatch user data to Redux
