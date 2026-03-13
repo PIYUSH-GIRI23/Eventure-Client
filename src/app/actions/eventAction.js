@@ -196,3 +196,67 @@ export async function debookmarkEventAction(payload) {
     };
   }
 }
+
+export async function registerToEventAction(payload) {
+  try {
+    const data = await eventController.registerToEvent(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 201,
+      data: {
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}
+
+export async function deregisterFromEventAction(payload) {
+  try {
+    const data = await eventController.deregisterFromEvent(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}

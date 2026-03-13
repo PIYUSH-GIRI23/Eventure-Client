@@ -237,12 +237,93 @@ const debookmarkEvent = async (payload) => {
     return response;
 }
 
+const registerToEvent = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const { access_token: _, refresh_token: __, ...bodyData } = payload;
+    const url = env.serverUrl + env.eventRoutes.registerEvent;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        body: JSON.stringify(bodyData),
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const deregisterFromEvent = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const tokens={
+        access_token,
+        refresh_token
+    }
+    const { access_token: _, refresh_token: __, ...bodyData } = payload;
+    const url = env.serverUrl + env.eventRoutes.deregisterEvent;
+    const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        body: JSON.stringify(bodyData),
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
 const eventsController = {
     getAllEvents,
     getSpecificEvent,
     rateEvent,
     derateEvent,
     bookmarkEvent,
-    debookmarkEvent
+    debookmarkEvent,
+    registerToEvent,
+    deregisterFromEvent,
 }
 export default eventsController;
