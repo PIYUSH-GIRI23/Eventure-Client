@@ -1,24 +1,24 @@
 "use client"
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useBookmarkedEvents } from './useBookmarkedEvents'
+import { useCreatedEvents } from './useCreatedEvents'
 import AllEventsView from './AllEventsView'
 import colorSchemeOptions from '@/app/state/colorschemeOptions'
 import LoadingSpinner from '@/app/components/LoadingSpinner'
 
-const BookmarkedEventsContainer = () => {
+const CreatedEventsContainer = () => {
   const {
     isClient,
     events,
     loading,
     error,
     isLoggedIn,
-    fetchBookmarkedEvents,
+    fetchCreatedEvents,
     handleLikeEvent,
     handleUnlikeEvent,
     handleBookmarkEvent,
     handleUnbookmarkEvent
-  } = useBookmarkedEvents()
+  } = useCreatedEvents()
 
   const colorId = useSelector((state) => state.colorscheme.id)
   const activeTheme = colorSchemeOptions.find((option) => option.id === colorId) ?? colorSchemeOptions[0]
@@ -33,7 +33,7 @@ const BookmarkedEventsContainer = () => {
 
   // Create sets for liked and bookmarked IDs from current events
   const likedEventIds = new Set(events.filter(e => e.likes && e.likes.length > 0).map(e => e._id))
-  const bookmarkedEventIds = new Set(events.map(e => e._id))
+  const bookmarkedEventIds = new Set(events.filter(e => e.bookmarked && e.bookmarked.length > 0).map(e => e._id))
 
   return (
     <AllEventsView
@@ -47,10 +47,10 @@ const BookmarkedEventsContainer = () => {
       onUnlikeEvent={handleUnlikeEvent}
       onBookmarkEvent={handleBookmarkEvent}
       onUnbookmarkEvent={handleUnbookmarkEvent}
-      onRefresh={fetchBookmarkedEvents}
+      onRefresh={fetchCreatedEvents}
       activeTheme={activeTheme}
     />
   )
 }
 
-export default BookmarkedEventsContainer
+export default CreatedEventsContainer

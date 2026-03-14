@@ -260,3 +260,135 @@ export async function deregisterFromEventAction(payload) {
     };
   }
 }
+
+export async function getBookmarkedEventsAction(payload) {
+  try {
+    const data = await eventController.getBookmarkedEvents(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        events: data.data,
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}
+
+export async function getLikedEventsAction(payload) {
+  try {
+    const data = await eventController.getLikedEvents(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        events: data.data,
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}
+
+export async function getRegisteredEventsAction(payload) {
+  try {
+    const data = await eventController.getRegisteredEvents(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        events: data.data,
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}
+
+export async function getCreatedEventsAction(payload) {
+  try {
+    const data = await eventController.getCreatedEvents(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        events: data.data,
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}

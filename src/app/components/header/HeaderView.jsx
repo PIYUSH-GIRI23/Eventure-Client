@@ -17,7 +17,8 @@ const HeaderView = ({
     isRefreshing,
     onCreateEventClick,
     showCreateModal,
-    setShowCreateModal
+    setShowCreateModal,
+    isHomeRoute
 }) => {
     return (
         <>
@@ -41,16 +42,18 @@ const HeaderView = ({
 
                         {isLoggedIn && (
                             <>
-                                {/* Refresh Button */}
-                                <button
-                                    onClick={onRefresh}
-                                    disabled={isRefreshing}
-                                    className="px-2 py-1 rounded hover:opacity-80 transition-opacity disabled:opacity-50"
-                                    title="Refresh events"
-                                    style={{ color: activeTheme.textColor }}
-                                >
-                                    <BiRefresh size={20} className={isRefreshing ? "animate-spin" : ""} />
-                                </button>
+                                {/* Refresh Button - Only show on home route */}
+                                {isHomeRoute && (
+                                    <button
+                                        onClick={onRefresh}
+                                        disabled={isRefreshing}
+                                        className="px-2 py-1 rounded hover:opacity-80 transition-opacity disabled:opacity-50"
+                                        title="Refresh events"
+                                        style={{ color: activeTheme.textColor }}
+                                    >
+                                        <BiRefresh size={20} className={isRefreshing ? "animate-spin" : ""} />
+                                    </button>
+                                )}
 
                                 <Link
                                     href={type === "manager" ? "/created-event" : "/registered-event"}

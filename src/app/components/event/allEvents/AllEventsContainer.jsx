@@ -37,7 +37,7 @@ const AllEventsContainer = () => {
       isLoggedIn={isLoggedIn}
       username={username}
       likedEvents={likedEventIds}
-      bookmarkedEvents={bookmarkedEventIds}
+      bookmarkedEvents={bookmarkedEventIds} 
       onLikeEvent={handleLikeEvent}
       onUnlikeEvent={handleUnlikeEvent}
       onBookmarkEvent={handleBookmarkEvent}

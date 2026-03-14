@@ -53,6 +53,16 @@ const eventsSlice = createSlice({
         state.bookmarkedEventIds = state.bookmarkedEventIds.filter(id => id !== eventId);
       }
     },
+    updateEventRegistered: (state, action) => {
+      const { eventId, isRegistered } = action.payload;
+      if (isRegistered) {
+        if (!state.registeredEventIds.includes(eventId)) {
+          state.registeredEventIds.push(eventId);
+        }
+      } else {
+        state.registeredEventIds = state.registeredEventIds.filter(id => id !== eventId);
+      }
+    },
     updateEventLikeCount: (state, action) => {
       const { eventId, count } = action.payload;
       const eventIndex = state.allEvents.findIndex((e) => e._id === eventId);
@@ -92,6 +102,7 @@ export const {
   setEventsError,
   updateEventLiked,
   updateEventBookmarked,
+  updateEventRegistered,
   updateEventLikeCount,
   updateEventBookmarkCount,
   clearEvents,

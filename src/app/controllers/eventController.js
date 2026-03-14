@@ -316,6 +316,162 @@ const deregisterFromEvent = async (payload) => {
 
     return response;
 }
+
+const getBookmarkedEvents = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const type = payload.type;
+    const tokens = {
+        access_token,
+        refresh_token
+    }
+    const url = env.serverUrl + env.eventRoutes.getBookmarkedEvents + `/${type}`;
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const getLikedEvents = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const type = payload.type;
+    const tokens = {
+        access_token,
+        refresh_token
+    }
+    const url = env.serverUrl + env.eventRoutes.getLikedEvents + `/${type}`;
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const getRegisteredEvents = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const type = payload.type;
+    const tokens = {
+        access_token,
+        refresh_token
+    }
+    const url = env.serverUrl + env.eventRoutes.getRegisteredEvents + `/${type}`;
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
+
+const getCreatedEvents = async (payload) => {
+    const access_token = payload.access_token;
+    const refresh_token = payload.refresh_token;
+    const type = payload.type;
+    const tokens = {
+        access_token,
+        refresh_token
+    }
+    const url = env.serverUrl + env.eventRoutes.getCreatedEvents + `/${type}`;
+    const res = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            tokens: JSON.stringify(tokens)
+        },
+        cache: 'no-store',
+    });
+
+    const data = await res.json();
+    if(!res.ok) {
+        const error = new Error(data.message || 'Fetch Failed');
+        error.statusCode = res.status;
+        throw error;
+    }
+
+    // Extract new tokens from response headers if they exist
+    const newAccessToken = res.headers.get('New-Access-Token');
+    const newRefreshToken = res.headers.get('New-Refresh-Token');
+
+    const response = {
+        ...data,
+    };
+
+    if (newAccessToken) response.new_access_token = newAccessToken;
+    if (newRefreshToken) response.new_refresh_token = newRefreshToken;
+
+    return response;
+}
 const eventsController = {
     getAllEvents,
     getSpecificEvent,
@@ -325,5 +481,9 @@ const eventsController = {
     debookmarkEvent,
     registerToEvent,
     deregisterFromEvent,
+    getBookmarkedEvents,
+    getLikedEvents,
+    getRegisteredEvents,
+    getCreatedEvents,
 }
 export default eventsController;

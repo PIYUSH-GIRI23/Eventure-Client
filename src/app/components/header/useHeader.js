@@ -43,6 +43,7 @@ export const useHeader = () => {
 
     const hiddenRoutes = ['/login', '/register']
     const isHidden = hiddenRoutes.includes(pathname)
+    const isHomeRoute = pathname === '/'
 
     // Handle refresh - forces API call by bypassing cache
     const handleRefresh = async () => {
@@ -100,6 +101,7 @@ export const useHeader = () => {
         isRefreshing,
         onCreateEventClick: handleCreateEventClick,
         showCreateModal,
-        setShowCreateModal
+        setShowCreateModal,
+        isHomeRoute
     }
 }

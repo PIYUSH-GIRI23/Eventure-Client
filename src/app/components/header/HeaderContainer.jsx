@@ -19,7 +19,8 @@ const HeaderContainer = () => {
         isRefreshing,
         onCreateEventClick,
         showCreateModal,
-        setShowCreateModal
+        setShowCreateModal,
+        isHomeRoute
     } = useHeader()
 
     if (isHidden || !isClient) return null
@@ -38,6 +39,7 @@ const HeaderContainer = () => {
             onCreateEventClick={onCreateEventClick}
             showCreateModal={showCreateModal}
             setShowCreateModal={setShowCreateModal}
+            isHomeRoute={isHomeRoute}
         />
     )
 }
