@@ -14,7 +14,12 @@ const HeaderContainer = () => {
         profileOpen,
         setProfileOpen,
         profileRef,
-        isHidden
+        isHidden,
+        onRefresh,
+        isRefreshing,
+        onCreateEventClick,
+        showCreateModal,
+        setShowCreateModal
     } = useHeader()
 
     if (isHidden || !isClient) return null
@@ -28,6 +33,11 @@ const HeaderContainer = () => {
             profileOpen={profileOpen}
             setProfileOpen={setProfileOpen}
             profileRef={profileRef}
+            onRefresh={onRefresh}
+            isRefreshing={isRefreshing}
+            onCreateEventClick={onCreateEventClick}
+            showCreateModal={showCreateModal}
+            setShowCreateModal={setShowCreateModal}
         />
     )
 }

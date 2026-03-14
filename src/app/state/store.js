@@ -4,10 +4,12 @@ import { persistMiddleware, loadPersistedState } from "./persistMiddleware";
 
 import colorschemeReducer from "./slices/colorschemeSlice";
 import userDataReducer from "./slices/userdataSlice";
+import eventsReducer from "./slices/eventsSlice";
 
 const appReducer = combineReducers({
   colorscheme: colorschemeReducer,
   userdata: userDataReducer,
+  events: eventsReducer,
 });
 
 const preloadedState =
@@ -19,5 +21,10 @@ export const store = configureStore({
   reducer: appReducer,
   preloadedState,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(persistMiddleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['events/setEventsSuccess', 'events/setEventsLoading'],
+        ignoredPaths: ['events']
+      }
+    }).concat(persistMiddleware),
 });

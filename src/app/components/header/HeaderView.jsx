@@ -1,6 +1,8 @@
 import React from "react"
 import Link from "next/link"
 import { BiBell, BiMessage } from "react-icons/bi"
+import { BiRefresh } from "react-icons/bi"
+import { IoAdd } from "react-icons/io5"
 import { performLogout } from "@/app/utils/logoutUtil"
 
 const HeaderView = ({
@@ -10,136 +12,182 @@ const HeaderView = ({
     activeTheme,
     profileOpen,
     setProfileOpen,
-    profileRef
+    profileRef,
+    onRefresh,
+    isRefreshing,
+    onCreateEventClick,
+    showCreateModal,
+    setShowCreateModal
 }) => {
     return (
-        <header
-            className="border-b"
-            style={{
-                backgroundColor: activeTheme.bgColor,
-                borderColor: activeTheme.divColor2,
-                color: activeTheme.textColor2
-            }}
-        >
-            <div className="mx-auto flex items-center justify-between gap-3 px-4 py-3">
+        <>
+            <header
+                className="border-b"
+                style={{
+                    backgroundColor: activeTheme.bgColor,
+                    borderColor: activeTheme.divColor2,
+                    color: activeTheme.textColor2
+                }}
+            >
+                <div className="mx-auto flex items-center justify-between gap-3 px-4 py-3">
 
-                {/* Left Section - Logo */}
-                <div className="flex items-center gap-6 text-xs sm:text-sm">
-                    <Link href="/" className="flex flex-col gap-0">
-                        <span className="font-bold" style={{ color: activeTheme.textColor }}>
-                            Eventure AI
-                        </span>
-                    </Link>
+                    {/* Left Section - Logo */}
+                    <div className="flex items-center gap-6 text-xs sm:text-sm">
+                        <Link href="/" className="flex flex-col gap-0">
+                            <span className="font-bold" style={{ color: activeTheme.textColor }}>
+                                Eventure AI
+                            </span>
+                        </Link>
 
-                    {isLoggedIn && (
-                        <>
-                            <Link
-                                href="/hotpicks"
-                                className="px-2 py-1 rounded hover:opacity-80"
-                                style={{ color: activeTheme.textColor }}
-                            >
-                                Hot Picks
-                            </Link>
-
-                            <Link
-                                href={type === "manager" ? "/created-events" : "/registered-events"}
-                                className="px-2 py-1 rounded hover:opacity-80"
-                                style={{ color: activeTheme.textColor }}
-                            >
-                                {type === "manager" ? "Created Events" : "Registered Events"}
-                            </Link>
-
-                            <Link
-                                href="/hotpicks"
-                                className="px-2 py-1 rounded hover:opacity-80"
-                                style={{ color: activeTheme.textColor }}
-                            >
-                                Bookmarked Events
-                            </Link>
-
-                            <Link
-                                href="/hotpicks"
-                                className="px-2 py-1 rounded hover:opacity-80"
-                                style={{ color: activeTheme.textColor }}
-                            >
-                                Liked Events
-                            </Link>
-                        </>
-                    )}
-                </div>
-
-                {/* Right Section */}
-                <div className="flex items-center gap-4 text-xs sm:text-sm">
-
-                    {!isLoggedIn ? (
-                        <>
-                            <Link href="/login" style={{ color: activeTheme.textColor }}>Login</Link>
-                            <Link href="/register" style={{ color: activeTheme.textColor }}>Register</Link>
-                        </>
-                    ) : (
-                        <div className="flex items-center gap-3">
-                            {/* Notifications and Chat Icons */}
-                            <button
-                                className="cursor-pointer hover:opacity-80 transition-opacity"
-                                title="Notifications"
-                                style={{ color: activeTheme.textColor }}
-                            >
-                                <BiBell size={20} />
-                            </button>
-
-                            <button
-                                className="mx-2 cursor-pointer hover:opacity-80 transition-opacity"
-                                title="Chat"
-                                style={{ color: activeTheme.textColor }}
-                            >
-                                <BiMessage size={20} />
-                            </button>
-
-                            {/* Profile Dropdown */}
-                            <div className="relative" ref={profileRef}>
+                        {isLoggedIn && (
+                            <>
+                                {/* Refresh Button */}
                                 <button
-                                    onClick={() => setProfileOpen(prev => !prev)}
-                                    className="cursor-pointer px-2 py-1 rounded hover:opacity-80"
+                                    onClick={onRefresh}
+                                    disabled={isRefreshing}
+                                    className="px-2 py-1 rounded hover:opacity-80 transition-opacity disabled:opacity-50"
+                                    title="Refresh events"
                                     style={{ color: activeTheme.textColor }}
                                 >
-                                    @{username} ▾
+                                    <BiRefresh size={20} className={isRefreshing ? "animate-spin" : ""} />
                                 </button>
 
-                                {profileOpen && (
-                                    <div
-                                        className="absolute right-0 top-full mt-2 flex flex-col min-w-40 rounded-md shadow-lg z-20"
-                                        style={{
-                                            backgroundColor: activeTheme.divColor,
-                                            border: `1px solid ${activeTheme.divColor2}`
-                                        }}
-                                    >
-                                        <Link
-                                            href="/account"
-                                            onClick={() => setProfileOpen(false)}
-                                            className="px-3 py-2 hover:opacity-80"
-                                            style={{ color: activeTheme.textColor }}
-                                        >
-                                            Account
-                                        </Link>
+                                <Link
+                                    href={type === "manager" ? "/created-event" : "/registered-event"}
+                                    className="px-2 py-1 rounded hover:opacity-80"
+                                    style={{ color: activeTheme.textColor }}
+                                >
+                                    {type === "manager" ? "Created Events" : "Registered Events"}
+                                </Link>
 
-                                        <button
-                                            onClick={() => {
-                                                performLogout()
-                                                setProfileOpen(false)
+                                <Link
+                                    href="/bookmarked-event"
+                                    className="px-2 py-1 rounded hover:opacity-80"
+                                    style={{ color: activeTheme.textColor }}
+                                >
+                                    Bookmarked Events
+                                </Link>
+
+                                <div className="flex items-center gap-2">
+                                    <Link
+                                        href="/liked-event"
+                                        className="px-2 py-1 rounded hover:opacity-80"
+                                        style={{ color: activeTheme.textColor }}
+                                    >
+                                        Liked Events
+                                    </Link>
+
+                                    {/* Create Event Button */}
+                                    <button
+                                        onClick={onCreateEventClick}
+                                        className="px-2 py-1 rounded hover:opacity-80 transition-opacity"
+                                        title="Create new event"
+                                        style={{ color: activeTheme.textColor }}
+                                    >
+                                        <IoAdd size={20} />
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Right Section */}
+                    <div className="flex items-center gap-4 text-xs sm:text-sm">
+
+                        {!isLoggedIn ? (
+                            <>
+                                <Link href="/login" style={{ color: activeTheme.textColor }}>Login</Link>
+                                <Link href="/register" style={{ color: activeTheme.textColor }}>Register</Link>
+                            </>
+                        ) : (
+                            <div className="flex items-center gap-3">
+                                {/* Notifications and Chat Icons */}
+                                <button
+                                    className="cursor-pointer hover:opacity-80 transition-opacity"
+                                    title="Notifications"
+                                    style={{ color: activeTheme.textColor }}
+                                >
+                                    <BiBell size={20} />
+                                </button>
+
+                                <button
+                                    className="mx-2 cursor-pointer hover:opacity-80 transition-opacity"
+                                    title="Chat"
+                                    style={{ color: activeTheme.textColor }}
+                                >
+                                    <BiMessage size={20} />
+                                </button>
+
+                                {/* Profile Dropdown */}
+                                <div className="relative" ref={profileRef}>
+                                    <button
+                                        onClick={() => setProfileOpen(prev => !prev)}
+                                        className="cursor-pointer px-2 py-1 rounded hover:opacity-80"
+                                        style={{ color: activeTheme.textColor }}
+                                    >
+                                        @{username} ▾
+                                    </button>
+
+                                    {profileOpen && (
+                                        <div
+                                            className="absolute right-0 top-full mt-2 flex flex-col min-w-40 rounded-md shadow-lg z-20"
+                                            style={{
+                                                backgroundColor: activeTheme.divColor,
+                                                border: `1px solid ${activeTheme.divColor2}`
                                             }}
-                                            className="px-3 py-2 text-left hover:opacity-80"
-                                            style={{ color: activeTheme.textColor }}
                                         >
-                                            Logout
-                                        </button>
-                                    </div>
-                                )}
+                                            <Link
+                                                href="/account"
+                                                onClick={() => setProfileOpen(false)}
+                                                className="px-3 py-2 hover:opacity-80"
+                                                style={{ color: activeTheme.textColor }}
+                                            >
+                                                Account
+                                            </Link>
+
+                                            <button
+                                                onClick={() => {
+                                                    performLogout()
+                                                    setProfileOpen(false)
+                                                }}
+                                                className="px-3 py-2 text-left hover:opacity-80"
+                                                style={{ color: activeTheme.textColor }}
+                                            >
+                                                Logout
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>
+
+            {/* Create Event Modal */}
+            {showCreateModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                    <div
+                        className="rounded-lg p-6 w-full max-w-md"
+                        style={{ backgroundColor: activeTheme.divColor }}
+                    >
+                        <h2 style={{ color: activeTheme.textColor }} className="text-xl font-bold mb-4">
+                            Create New Event
+                        </h2>
+                        <p style={{ color: activeTheme.textColor }} className="mb-6">
+                            Event creation form will go here...
+                        </p>
+                        <button
+                            onClick={() => setShowCreateModal(false)}
+                            className="px-4 py-2 rounded hover:opacity-80"
+                            style={{ backgroundColor: activeTheme.bgColor, color: activeTheme.textColor }}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

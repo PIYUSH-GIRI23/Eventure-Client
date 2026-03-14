@@ -14,9 +14,12 @@ export const useHeader = () => {
 
     const colorId = useSelector((state) => state.colorscheme.id)
     const { isLoggedIn, username, type } = useSelector((state) => state.userdata)
+    const dispatch = useDispatch()
 
     const pathname = usePathname()
     const [profileOpen, setProfileOpen] = useState(false)
+    const [showCreateModal, setShowCreateModal] = useState(false)
+    const [isRefreshing, setIsRefreshing] = useState(false)
     const profileRef = useRef(null)
 
     const activeTheme = useMemo(
@@ -41,6 +44,48 @@ export const useHeader = () => {
     const hiddenRoutes = ['/login', '/register']
     const isHidden = hiddenRoutes.includes(pathname)
 
+    // Handle refresh - forces API call by bypassing cache
+    const handleRefresh = async () => {
+        setIsRefreshing(true)
+        try {
+            // Import the forceRefresh action
+            const { forceRefresh } = await import("@/app/state/slices/eventsSlice")
+            
+            // Dispatch to clear cache
+            dispatch(forceRefresh())
+            
+            // Get current auth tokens
+            const accessToken = localStorage.getItem("access_token")
+            const refreshToken = localStorage.getItem("refresh_token")
+
+            // Import and call the action directly
+            const { getAllEventsAction } = await import("@/app/actions/eventAction")
+            
+            const response = await getAllEventsAction({
+                access_token: accessToken,
+                refresh_token: refreshToken
+            })
+
+            if (response.success) {
+                // Update tokens if refreshed
+                if (response.new_access_token) {
+                    localStorage.setItem("access_token", response.new_access_token)
+                }
+                if (response.new_refresh_token) {
+                    localStorage.setItem("refresh_token", response.new_refresh_token)
+                }
+            }
+        } catch (err) {
+            console.error("Failed to refresh events:", err)
+        } finally {
+            setIsRefreshing(false)
+        }
+    }
+
+    const handleCreateEventClick = () => {
+        setShowCreateModal(true)
+    }
+
     return {
         isClient,
         isLoggedIn,
@@ -50,6 +95,11 @@ export const useHeader = () => {
         profileOpen,
         setProfileOpen,
         profileRef,
-        isHidden
+        isHidden,
+        onRefresh: handleRefresh,
+        isRefreshing,
+        onCreateEventClick: handleCreateEventClick,
+        showCreateModal,
+        setShowCreateModal
     }
 }
