@@ -102,7 +102,6 @@ export const useLogin = () => {
         setLoading(false)
         return
       }
-      console.log(res);
       const { tokens, user } = res.data
 
       // Store tokens in localStorage

@@ -50,7 +50,6 @@ export const useSpecificEvents = () => {
             }
 
             const response = await getSpecificEventAction(payload)
-            console.log(response)
 
             if (!response.success) {
                 if (response.statusCode === 401 || response.statusCode === 403) {

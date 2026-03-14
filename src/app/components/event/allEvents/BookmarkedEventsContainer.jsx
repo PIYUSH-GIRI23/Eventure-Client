@@ -5,14 +5,13 @@ import { useAllEvents } from './useAllEvents'
 import AllEventsView from './AllEventsView'
 import colorSchemeOptions from '@/app/state/colorschemeOptions'
 
-const AllEventsContainer = () => {
+const BookmarkedEventsContainer = () => {
   const {
     isClient,
-    allEvents,
+    bookmarkedEventsArray,
     loading,
     error,
     isLoggedIn,
-    username,
     likedEventIds,
     bookmarkedEventIds,
     fetchAllEvents,
@@ -31,11 +30,10 @@ const AllEventsContainer = () => {
 
   return (
     <AllEventsView
-      events={allEvents}
+      events={bookmarkedEventsArray}
       loading={loading}
       error={error}
       isLoggedIn={isLoggedIn}
-      username={username}
       likedEvents={likedEventIds}
       bookmarkedEvents={bookmarkedEventIds}
       onLikeEvent={handleLikeEvent}
@@ -48,4 +46,4 @@ const AllEventsContainer = () => {
   )
 }
 
-export default AllEventsContainer
+export default BookmarkedEventsContainer
