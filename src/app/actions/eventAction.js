@@ -2,6 +2,40 @@
 
 import eventController from "@/app/controllers/eventController";
 
+export async function createEventAction(payload) {
+  try {
+    const data = await eventController.createEvent(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 201,
+      data: {
+        message: data.message,
+        eventId: data.eventId,
+        event: data.event,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+    
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred while creating event"
+    };
+  }
+}
+
 export async function getAllEventsAction(payload) {
   try {
     const data = await eventController.getAllEvents(payload);
@@ -370,6 +404,74 @@ export async function getCreatedEventsAction(payload) {
       statusCode: 200,
       data: {
         events: data.data,
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}
+
+export async function uploadImageAction(payload) {
+  try {
+    const data = await eventController.uploadImage(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        url: data.url,
+        publicId: data.publicId,
+        message: data.message,
+      }
+    };
+
+    // Include new tokens if they were refreshed
+    if (data.new_access_token) {
+      response.new_access_token = data.new_access_token;
+    }
+    if (data.new_refresh_token) {
+      response.new_refresh_token = data.new_refresh_token;
+    }
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred"
+    };
+  }
+}
+
+export async function uploadVideoAction(payload) {
+  try {
+    const data = await eventController.uploadVideo(payload);
+    
+    // Prepare response with potentially new tokens
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        url: data.url,
+        publicId: data.publicId,
         message: data.message,
       }
     };
