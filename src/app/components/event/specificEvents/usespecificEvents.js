@@ -31,6 +31,8 @@ export const useSpecificEvents = () => {
     const [showBookmarkedModal, setShowBookmarkedModal] = useState(false)
     const [showDetailsModal, setShowDetailsModal] = useState(false)
     const [showVolunteersModal, setShowVolunteersModal] = useState(false)
+    const [showImageModal, setShowImageModal] = useState(false)
+    const [showVideoModal, setShowVideoModal] = useState(false)
 
     // Fetch specific event
     const fetchSpecificEvent = useCallback(async () => {
@@ -364,6 +366,26 @@ export const useSpecificEvents = () => {
         }
     }
 
+    // Handle image uploaded
+    const handleImageUploaded = (url, publicId) => {
+        if (event) {
+            setEvent((prev) => ({
+                ...prev,
+                images: [...(prev.images || []), { url, publicId, uploaded_at: Date.now() }]
+            }))
+        }
+    }
+
+    // Handle video uploaded
+    const handleVideoUploaded = (url, publicId) => {
+        if (event) {
+            setEvent((prev) => ({
+                ...prev,
+                videos: [...(prev.videos || []), { url, publicId, uploaded_at: Date.now() }]
+            }))
+        }
+    }
+
     return {
         isClient,
         isLoggedIn,
@@ -385,11 +407,17 @@ export const useSpecificEvents = () => {
         setShowDetailsModal,
         showVolunteersModal,
         setShowVolunteersModal,
+        showImageModal,
+        setShowImageModal,
+        showVideoModal,
+        setShowVideoModal,
         handleLikeEvent,
         handleUnlikeEvent,
         handleBookmarkEvent,
         handleUnbookmarkEvent,
         handleRegisterEvent,
-        handleDeregisterEvent
+        handleDeregisterEvent,
+        handleImageUploaded,
+        handleVideoUploaded
     }
 }

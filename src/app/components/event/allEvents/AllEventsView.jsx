@@ -87,14 +87,20 @@ const AllEventsView = ({
                                         className="relative overflow-hidden h-48 w-full block"
                                         style={{ backgroundColor: activeTheme.divColor2 }}
                                     >
-                                        <Image
-                                            src={event.banner}
-                                            alt={event.event_name}
-                                            fill
-                                            className="object-contain"
-                                            quality={75}
-                                            priority={false}
-                                        />
+                                        {event.banner ? (
+                                            <Image
+                                                src={event.banner}
+                                                alt={event.event_name}
+                                                fill
+                                                className="object-contain"
+                                                quality={75}
+                                                priority={false}
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center" style={{ color: activeTheme.textColor }}>
+                                                <span className="text-sm">No Image</span>
+                                            </div>
+                                        )}
 
                                         {/* Action Buttons (Like & Bookmark) */}
                                         <div className="absolute top-3 right-3 flex gap-2">

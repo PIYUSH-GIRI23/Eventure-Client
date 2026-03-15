@@ -4,6 +4,7 @@ import { BiBell, BiMessage } from "react-icons/bi"
 import { BiRefresh } from "react-icons/bi"
 import { IoAdd } from "react-icons/io5"
 import { performLogout } from "@/app/utils/logoutUtil"
+import CreateEventModalContainer from "./CreateEventModalContainer"
 
 const HeaderView = ({
     isLoggedIn,
@@ -80,15 +81,17 @@ const HeaderView = ({
                                         Liked Events
                                     </Link>
 
-                                    {/* Create Event Button */}
-                                    <button
-                                        onClick={onCreateEventClick}
-                                        className="px-2 py-1 rounded hover:opacity-80 transition-opacity"
-                                        title="Create new event"
-                                        style={{ color: activeTheme.textColor }}
-                                    >
-                                        <IoAdd size={20} />
-                                    </button>
+                                    {/* Create Event Button - Only for managers */}
+                                    {type === 'manager' && (
+                                        <button
+                                            onClick={onCreateEventClick}
+                                            className="px-2 py-1 rounded hover:opacity-80 transition-opacity"
+                                            title="Create new event"
+                                            style={{ color: activeTheme.textColor }}
+                                        >
+                                            <IoAdd size={20} />
+                                        </button>
+                                    )}
                                 </div>
                             </>
                         )}
@@ -168,28 +171,14 @@ const HeaderView = ({
             </header>
 
             {/* Create Event Modal */}
-            {showCreateModal && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                    <div
-                        className="rounded-lg p-6 w-full max-w-md"
-                        style={{ backgroundColor: activeTheme.divColor }}
-                    >
-                        <h2 style={{ color: activeTheme.textColor }} className="text-xl font-bold mb-4">
-                            Create New Event
-                        </h2>
-                        <p style={{ color: activeTheme.textColor }} className="mb-6">
-                            Event creation form will go here...
-                        </p>
-                        <button
-                            onClick={() => setShowCreateModal(false)}
-                            className="px-4 py-2 rounded hover:opacity-80"
-                            style={{ backgroundColor: activeTheme.bgColor, color: activeTheme.textColor }}
-                        >
-                            Close
-                        </button>
-                    </div>
-                </div>
-            )}
+            <CreateEventModalContainer
+                isOpen={showCreateModal}
+                onClose={() => setShowCreateModal(false)}
+                activeTheme={activeTheme}
+                onEventCreated={() => {
+                    setShowCreateModal(false)
+                }}
+            />
         </>
     )
 }

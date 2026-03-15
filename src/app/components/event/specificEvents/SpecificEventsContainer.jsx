@@ -33,12 +33,18 @@ const SpecificEventsContainer = () => {
     setShowDetailsModal,
     showVolunteersModal,
     setShowVolunteersModal,
+    showImageModal,
+    setShowImageModal,
+    showVideoModal,
+    setShowVideoModal,
     handleLikeEvent,
     handleUnlikeEvent,
     handleBookmarkEvent,
     handleUnbookmarkEvent,
     handleRegisterEvent,
-    handleDeregisterEvent
+    handleDeregisterEvent,
+    handleImageUploaded,
+    handleVideoUploaded
   } = useSpecificEvents()
 
   const activeTheme = colorSchemeOptions.find((option) => option.id === colorId) ?? colorSchemeOptions[0]
@@ -81,10 +87,16 @@ const SpecificEventsContainer = () => {
         setShowDetailsModal={setShowDetailsModal}
         showVolunteersModal={showVolunteersModal}
         setShowVolunteersModal={setShowVolunteersModal}
+        showImageModal={showImageModal}
+        setShowImageModal={setShowImageModal}
+        showVideoModal={showVideoModal}
+        setShowVideoModal={setShowVideoModal}
         onLikeEvent={isLiked ? handleUnlikeEvent : handleLikeEvent}
         onBookmarkEvent={isBookmarked ? handleUnbookmarkEvent : handleBookmarkEvent}
         onRegisterEvent={isRegistered ? handleDeregisterEvent : handleRegisterEvent}
         activeTheme={activeTheme}
+        onImageUploaded={handleImageUploaded}
+        onVideoUploaded={handleVideoUploaded}
       />
     </>
   )

@@ -7,11 +7,14 @@ import { FiHeart, FiBookmark } from 'react-icons/fi'
 import { FaHeart, FaBookmark } from 'react-icons/fa'
 import { MdInfo } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
+import { FiPlus } from 'react-icons/fi'
 import formatDateTime from '@/app/utils/formatDateTime'
 import Likes from './modal/Likes'
 import Bookmarked from './modal/Bookmarked'
 import Details from './modal/Details'
 import Volunteers from './modal/Volunteers'
+import ImageModal from './modal/Image'
+import VideoModal from './modal/Video'
 
 const SpecificEventsView = ({
     event,
@@ -33,10 +36,16 @@ const SpecificEventsView = ({
     setShowDetailsModal,
     showVolunteersModal,
     setShowVolunteersModal,
+    showImageModal,
+    setShowImageModal,
+    showVideoModal,
+    setShowVideoModal,
     onLikeEvent,
     onBookmarkEvent,
     onRegisterEvent,
-    activeTheme
+    activeTheme,
+    onImageUploaded,
+    onVideoUploaded
 }) => {
     const router = useRouter()
 
@@ -78,15 +87,21 @@ const SpecificEventsView = ({
                 {/* Banner Section */}
                 <div className="mb-8">
                     <div className="relative w-full rounded-xl overflow-hidden shadow-lg mb-4" style={{ aspectRatio: '3 / 2', maxHeight: '300px' }}>
-                        <Image
-                            src={event.banner}
-                            alt={event.event_name}
-                            fill
-                            className="object-contain"
-                            quality={95}
-                            priority
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1100px"
-                        />
+                        {event.banner ? (
+                            <Image
+                                src={event.banner}
+                                alt={event.event_name}
+                                fill
+                                className="object-contain"
+                                quality={95}
+                                priority
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1100px"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center" style={{ backgroundColor: activeTheme.divColor2, color: activeTheme.textColor }}>
+                                <span className="text-lg font-medium">No Banner Image</span>
+                            </div>
+                        )}
 
                         {/* Floating Action Buttons */}
                         <div className="absolute top-4 right-4 flex gap-2 md:gap-3">
@@ -213,9 +228,10 @@ const SpecificEventsView = ({
                     <div className="rounded-lg p-4" style={{ backgroundColor: activeTheme.divColor }}>
                         <button
                             onClick={onRegisterEvent}
-                            className={`w-full py-2 rounded-lg font-medium transition-all duration-200 text-white ${!isLoggedIn ? "opacity-50 cursor-not-allowed" : ""}`}
-                            disabled={!isLoggedIn}
+                            className={`w-full py-2 rounded-lg font-medium transition-all duration-200 text-white ${!isLoggedIn || type === 'manager' ? "opacity-50 cursor-not-allowed" : ""}`}
+                            disabled={!isLoggedIn || type === 'manager'}
                             style={{ backgroundColor: isRegistered ? '#ef4444' : activeTheme.textColor2 }}
+                            title={type === 'manager' ? 'Managers cannot register for events' : !isLoggedIn ? 'Please login to register' : ''}
                         >
                             {isRegistered ? 'Deregister' : 'Register'}
                         </button>
@@ -309,54 +325,90 @@ const SpecificEventsView = ({
                         )}
 
                         {activeTab === 'images' && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {!event.images || event.images.length === 0 ? (
-                                    <p style={{ color: activeTheme.textColor2 }}>No images yet</p>
-                                ) : (
-                                    event.images.map((image, index) => (
-                                        <div 
-                                            key={index}
-                                            className="relative h-48 rounded-lg overflow-hidden group"
-                                            style={{ backgroundColor: activeTheme.divColor }}
-                                        >
-                                            <Image
-                                                src={image.url}
-                                                alt={`Event image ${index + 1}`}
-                                                fill
-                                                className="object-cover"
-                                                quality={75}
-                                            />
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
-                                                <p className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    {formatDateTime(image.uploaded_at)}
-                                                </p>
+                            <div>
+                                {/* Add Image Button */}
+                                <div className="flex justify-end mb-4">
+                                    <button
+                                        onClick={() => setShowImageModal(true)}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-white transition-all hover:opacity-90"
+                                        style={{ backgroundColor: activeTheme.textColor2 }}
+                                    >
+                                        <FiPlus size={20} />
+                                        Add Images
+                                    </button>
+                                </div>
+
+                                {/* Images Grid */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {!event.images || event.images.length === 0 ? (
+                                        <p style={{ color: activeTheme.textColor2 }}>No images yet</p>
+                                    ) : (
+                                        event.images.filter(image => image.url).map((image, index) => (
+                                            <div 
+                                                key={index}
+                                                className="relative h-48 rounded-lg overflow-hidden group"
+                                                style={{ backgroundColor: activeTheme.divColor }}
+                                            >
+                                                {image.url && (
+                                                    <>
+                                                        <Image
+                                                            src={image.url}
+                                                            alt={`Event image ${index + 1}`}
+                                                            fill
+                                                            className="object-cover"
+                                                            quality={75}
+                                                        />
+                                                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-center justify-center">
+                                                            <p className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                {formatDateTime(image.uploaded_at)}
+                                                            </p>
+                                                        </div>
+                                                    </>
+                                                )}
                                             </div>
-                                        </div>
-                                    ))
-                                )}
+                                        ))
+                                    )}
+                                </div>
                             </div>
                         )}
 
                         {activeTab === 'videos' && (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {!event.videos || event.videos.length === 0 ? (
-                                    <p style={{ color: activeTheme.textColor2 }}>No videos yet</p>
-                                ) : (
-                                    event.videos.map((video, index) => (
-                                        <div 
-                                            key={index}
-                                            className="relative h-48 rounded-lg overflow-hidden group"
-                                            style={{ backgroundColor: activeTheme.divColor }}
-                                        >
-                                            <iframe
-                                                src={video.url}
-                                                title={`Event video ${index + 1}`}
-                                                className="w-full h-full"
-                                                allowFullScreen
-                                            />
-                                        </div>
-                                    ))
-                                )}
+                            <div>
+                                {/* Add Video Button */}
+                                <div className="flex justify-end mb-4">
+                                    <button
+                                        onClick={() => setShowVideoModal(true)}
+                                        className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-white transition-all hover:opacity-90"
+                                        style={{ backgroundColor: activeTheme.textColor2 }}
+                                    >
+                                        <FiPlus size={20} />
+                                        Add Videos
+                                    </button>
+                                </div>
+
+                                {/* Videos Grid */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {!event.videos || event.videos.length === 0 ? (
+                                        <p style={{ color: activeTheme.textColor2 }}>No videos yet</p>
+                                    ) : (
+                                        event.videos.filter(video => video.url).map((video, index) => (
+                                            <div 
+                                                key={index}
+                                                className="relative h-48 rounded-lg overflow-hidden group"
+                                                style={{ backgroundColor: activeTheme.divColor }}
+                                            >
+                                                {video.url && (
+                                                    <iframe
+                                                        src={video.url}
+                                                        title={`Event video ${index + 1}`}
+                                                        className="w-full h-full"
+                                                        allowFullScreen
+                                                    />
+                                                )}
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -388,6 +440,20 @@ const SpecificEventsView = ({
                     onClose={() => setShowVolunteersModal(false)}
                     volunteers={event.volunteers}
                     activeTheme={activeTheme}
+                />
+                <ImageModal 
+                    isOpen={showImageModal}
+                    onClose={() => setShowImageModal(false)}
+                    eventId={event._id}
+                    activeTheme={activeTheme}
+                    onImageUploaded={onImageUploaded}
+                />
+                <VideoModal 
+                    isOpen={showVideoModal}
+                    onClose={() => setShowVideoModal(false)}
+                    eventId={event._id}
+                    activeTheme={activeTheme}
+                    onVideoUploaded={onVideoUploaded}
                 />
             </div>
         </div>
