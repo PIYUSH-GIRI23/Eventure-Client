@@ -30,8 +30,9 @@ export const useAllEvents = () => {
     const fetchAllEvents = useCallback(async (forceRefresh = false) => {
         if (!isClient) return
 
-        // Only fetch if data is empty or force refresh is true (5 minute cache)
-        const isCached = allEvents.length > 0 && !forceRefresh && lastFetchTime && (Date.now() - lastFetchTime) < 5 * 60 * 1000
+        // Only fetch if this is a force refresh or cache is expired (5 minute cache)
+        // lastFetchTime === null means never fetched before
+        const isCached = !forceRefresh && lastFetchTime && (Date.now() - lastFetchTime) < 5 * 60 * 1000
         if (isCached) {
             return
         }
@@ -95,7 +96,7 @@ export const useAllEvents = () => {
         } catch (err) {
             dispatch(setEventsError(err.message || "An error occurred while fetching events"))
         }
-    }, [isClient, isLoggedIn, username, dispatch, allEvents.length, lastFetchTime])
+    }, [isClient, isLoggedIn, username, dispatch, lastFetchTime])
 
     // Initial fetch on component mount
     useEffect(() => {
