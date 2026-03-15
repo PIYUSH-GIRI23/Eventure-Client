@@ -14,6 +14,7 @@ const AllEventsView = ({
     loading,
     error,
     isLoggedIn,
+    type,
     likedEvents,
     bookmarkedEvents,
     onLikeEvent,
@@ -207,13 +208,18 @@ const AllEventsView = ({
                                             >
                                                 View
                                             </Link>
-                                            <Link
-                                                href={`/event/${event._id}`}
-                                                className="flex-1 px-4 py-2 text-white font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:opacity-80 block text-center"
-                                                style={{ backgroundColor: activeTheme.textColor2 }}
-                                            >
-                                                Register
-                                            </Link>
+                                            {type !== "manager" ? (
+                                                <Link
+                                                    href={`/event/${event._id}`}
+                                                    className="flex-1 px-4 py-2 text-white font-medium rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:opacity-80 block text-center"
+                                                    style={{ backgroundColor: activeTheme.textColor2 }}
+                                                >
+                                                    
+                                                    Register
+                                                </Link>
+                                            ) : (
+                                                <></>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

@@ -323,6 +323,7 @@ export const useAllEvents = () => {
         handleLikeEvent,
         handleUnlikeEvent,
         handleBookmarkEvent,
-        handleUnbookmarkEvent
+        handleUnbookmarkEvent,
+        type
     }
 }

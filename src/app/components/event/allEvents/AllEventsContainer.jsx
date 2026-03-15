@@ -13,6 +13,7 @@ const AllEventsContainer = () => {
     error,
     isLoggedIn,
     username,
+    type,
     likedEventIds,
     bookmarkedEventIds,
     fetchAllEvents,
@@ -21,7 +22,7 @@ const AllEventsContainer = () => {
     handleBookmarkEvent,
     handleUnbookmarkEvent
   } = useAllEvents()
-
+  
   const colorId = useSelector((state) => state.colorscheme.id)
   const activeTheme = colorSchemeOptions.find((option) => option.id === colorId) ?? colorSchemeOptions[0]
 
@@ -36,6 +37,7 @@ const AllEventsContainer = () => {
       error={error}
       isLoggedIn={isLoggedIn}
       username={username}
+      type={type}
       likedEvents={likedEventIds}
       bookmarkedEvents={bookmarkedEventIds} 
       onLikeEvent={handleLikeEvent}
