@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react"
+import { useParams } from "next/navigation"
 import { useSelector } from "react-redux"
 import { volunteerProfileAction } from "@/app/actions/userAction"
 import { performLogout } from "@/app/utils/logoutUtil"
@@ -13,8 +14,9 @@ export const useVolunteer = () => {
         () => false
     )
 
+    const params = useParams()
+    const username = params.id
     const colorId = useSelector((state) => state.colorscheme.id)
-    const { username } = useSelector((state) => state.userdata)
     
     const [volunteer, setVolunteer] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -34,7 +36,7 @@ export const useVolunteer = () => {
             const refreshToken = localStorage.getItem("refresh_token")
 
             const response = await volunteerProfileAction({
-                username,
+                username: username,
                 access_token: accessToken,
                 refresh_token: refreshToken
             })
