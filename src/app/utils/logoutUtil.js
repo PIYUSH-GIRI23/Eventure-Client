@@ -9,6 +9,7 @@ export const performLogout = () => {
     localStorage.removeItem("refresh_token");
 
     store.dispatch(logout());
+    window.location.href = "/";
 
     return true;
   } 
