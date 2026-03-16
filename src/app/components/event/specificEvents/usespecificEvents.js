@@ -102,6 +102,14 @@ export const useSpecificEvents = () => {
     const handleLikeEvent = async () => {
         if (!isClient || !isLoggedIn) return
 
+        // Optimistically update UI
+        setIsLiked(true)
+        setEvent((prev) => ({
+            ...prev,
+            likes_count: (prev.likes_count || 0) + 1,
+            likes: [...(prev.likes || []), { username, liked_time: Date.now(), type }]
+        }))
+
         try {
             const accessToken = localStorage.getItem("access_token")
             const refreshToken = localStorage.getItem("refresh_token")
@@ -115,17 +123,7 @@ export const useSpecificEvents = () => {
 
             const response = await rateEventAction(payload)
 
-            if (!response.success) {
-                if (response.statusCode === 401 || response.statusCode === 403) {
-                    performLogout()
-                    router.push('/login')
-                    return
-                }
-                setError(response.message || "Failed to like event")
-                return
-            }
-
-            // Store new tokens if they were refreshed
+            // Handle token refresh
             if (response.new_access_token) {
                 localStorage.setItem("access_token", response.new_access_token)
             }
@@ -133,13 +131,30 @@ export const useSpecificEvents = () => {
                 localStorage.setItem("refresh_token", response.new_refresh_token)
             }
 
-            setIsLiked(true)
+            if (!response.success) {
+                // Revert optimistic update on error
+                setIsLiked(false)
+                setEvent((prev) => ({
+                    ...prev,
+                    likes_count: Math.max(0, (prev.likes_count || 1) - 1),
+                    likes: (prev.likes || []).filter((like) => like.username !== username)
+                }))
+
+                if (response.statusCode === 401 || response.statusCode === 403) {
+                    performLogout()
+                    router.push('/login')
+                    return
+                }
+                setError(response.message || "Failed to like event")
+            }
+        } catch (err) {
+            // Revert optimistic update on error
+            setIsLiked(false)
             setEvent((prev) => ({
                 ...prev,
-                likes_count: (prev.likes_count || 0) + 1,
-                likes: [...(prev.likes || []), { username, liked_time: Date.now(), type }]
+                likes_count: Math.max(0, (prev.likes_count || 1) - 1),
+                likes: (prev.likes || []).filter((like) => like.username !== username)
             }))
-        } catch (err) {
             setError(err.message || "An error occurred while liking the event")
         }
     }
@@ -147,6 +162,14 @@ export const useSpecificEvents = () => {
     // Unlike event
     const handleUnlikeEvent = async () => {
         if (!isClient || !isLoggedIn) return
+
+        // Optimistically update UI
+        setIsLiked(false)
+        setEvent((prev) => ({
+            ...prev,
+            likes_count: Math.max(0, (prev.likes_count || 0) - 1),
+            likes: (prev.likes || []).filter((like) => like.username !== username)
+        }))
 
         try {
             const accessToken = localStorage.getItem("access_token")
@@ -161,17 +184,7 @@ export const useSpecificEvents = () => {
 
             const response = await derateEventAction(payload)
 
-            if (!response.success) {
-                if (response.statusCode === 401 || response.statusCode === 403) {
-                    performLogout()
-                    router.push('/login')
-                    return
-                }
-                setError(response.message || "Failed to unlike event")
-                return
-            }
-
-            // Store new tokens if they were refreshed
+            // Handle token refresh
             if (response.new_access_token) {
                 localStorage.setItem("access_token", response.new_access_token)
             }
@@ -179,13 +192,30 @@ export const useSpecificEvents = () => {
                 localStorage.setItem("refresh_token", response.new_refresh_token)
             }
 
-            setIsLiked(false)
+            if (!response.success) {
+                // Revert optimistic update on error
+                setIsLiked(true)
+                setEvent((prev) => ({
+                    ...prev,
+                    likes_count: (prev.likes_count || 0) + 1,
+                    likes: [...(prev.likes || []), { username, liked_time: Date.now(), type }]
+                }))
+
+                if (response.statusCode === 401 || response.statusCode === 403) {
+                    performLogout()
+                    router.push('/login')
+                    return
+                }
+                setError(response.message || "Failed to unlike event")
+            }
+        } catch (err) {
+            // Revert optimistic update on error
+            setIsLiked(true)
             setEvent((prev) => ({
                 ...prev,
-                likes_count: Math.max(0, (prev.likes_count || 0) - 1),
-                likes: (prev.likes || []).filter((like) => like.username !== username)
+                likes_count: (prev.likes_count || 0) + 1,
+                likes: [...(prev.likes || []), { username, liked_time: Date.now(), type }]
             }))
-        } catch (err) {
             setError(err.message || "An error occurred while unliking the event")
         }
     }
@@ -193,6 +223,14 @@ export const useSpecificEvents = () => {
     // Bookmark event
     const handleBookmarkEvent = async () => {
         if (!isClient || !isLoggedIn) return
+
+        // Optimistically update UI
+        setIsBookmarked(true)
+        setEvent((prev) => ({
+            ...prev,
+            bookmark_count: (prev.bookmark_count || 0) + 1,
+            bookmarked: [...(prev.bookmarked || []), { username, bookmark_time: Date.now(), type }]
+        }))
 
         try {
             const accessToken = localStorage.getItem("access_token")
@@ -207,17 +245,7 @@ export const useSpecificEvents = () => {
 
             const response = await bookmarkEventAction(payload)
 
-            if (!response.success) {
-                if (response.statusCode === 401 || response.statusCode === 403) {
-                    performLogout()
-                    router.push('/login')
-                    return
-                }
-                setError(response.message || "Failed to bookmark event")
-                return
-            }
-
-            // Store new tokens if they were refreshed
+            // Handle token refresh
             if (response.new_access_token) {
                 localStorage.setItem("access_token", response.new_access_token)
             }
@@ -225,13 +253,30 @@ export const useSpecificEvents = () => {
                 localStorage.setItem("refresh_token", response.new_refresh_token)
             }
 
-            setIsBookmarked(true)
+            if (!response.success) {
+                // Revert optimistic update on error
+                setIsBookmarked(false)
+                setEvent((prev) => ({
+                    ...prev,
+                    bookmark_count: Math.max(0, (prev.bookmark_count || 1) - 1),
+                    bookmarked: (prev.bookmarked || []).filter((bookmark) => bookmark.username !== username)
+                }))
+
+                if (response.statusCode === 401 || response.statusCode === 403) {
+                    performLogout()
+                    router.push('/login')
+                    return
+                }
+                setError(response.message || "Failed to bookmark event")
+            }
+        } catch (err) {
+            // Revert optimistic update on error
+            setIsBookmarked(false)
             setEvent((prev) => ({
                 ...prev,
-                bookmark_count: (prev.bookmark_count || 0) + 1,
-                bookmarked: [...(prev.bookmarked || []), { username, bookmark_time: Date.now(), type }]
+                bookmark_count: Math.max(0, (prev.bookmark_count || 1) - 1),
+                bookmarked: (prev.bookmarked || []).filter((bookmark) => bookmark.username !== username)
             }))
-        } catch (err) {
             setError(err.message || "An error occurred while bookmarking the event")
         }
     }
@@ -239,6 +284,14 @@ export const useSpecificEvents = () => {
     // Unbookmark event
     const handleUnbookmarkEvent = async () => {
         if (!isClient || !isLoggedIn) return
+
+        // Optimistically update UI
+        setIsBookmarked(false)
+        setEvent((prev) => ({
+            ...prev,
+            bookmark_count: Math.max(0, (prev.bookmark_count || 0) - 1),
+            bookmarked: (prev.bookmarked || []).filter((bookmark) => bookmark.username !== username)
+        }))
 
         try {
             const accessToken = localStorage.getItem("access_token")
@@ -253,17 +306,7 @@ export const useSpecificEvents = () => {
 
             const response = await debookmarkEventAction(payload)
 
-            if (!response.success) {
-                if (response.statusCode === 401 || response.statusCode === 403) {
-                    performLogout()
-                    router.push('/login')
-                    return
-                }
-                setError(response.message || "Failed to unbookmark event")
-                return
-            }
-
-            // Store new tokens if they were refreshed
+            // Handle token refresh
             if (response.new_access_token) {
                 localStorage.setItem("access_token", response.new_access_token)
             }
@@ -271,13 +314,30 @@ export const useSpecificEvents = () => {
                 localStorage.setItem("refresh_token", response.new_refresh_token)
             }
 
-            setIsBookmarked(false)
+            if (!response.success) {
+                // Revert optimistic update on error
+                setIsBookmarked(true)
+                setEvent((prev) => ({
+                    ...prev,
+                    bookmark_count: (prev.bookmark_count || 0) + 1,
+                    bookmarked: [...(prev.bookmarked || []), { username, bookmark_time: Date.now(), type }]
+                }))
+
+                if (response.statusCode === 401 || response.statusCode === 403) {
+                    performLogout()
+                    router.push('/login')
+                    return
+                }
+                setError(response.message || "Failed to unbookmark event")
+            }
+        } catch (err) {
+            // Revert optimistic update on error
+            setIsBookmarked(true)
             setEvent((prev) => ({
                 ...prev,
-                bookmark_count: Math.max(0, (prev.bookmark_count || 0) - 1),
-                bookmarked: (prev.bookmarked || []).filter((bookmark) => bookmark.username !== username)
+                bookmark_count: (prev.bookmark_count || 0) + 1,
+                bookmarked: [...(prev.bookmarked || []), { username, bookmark_time: Date.now(), type }]
             }))
-        } catch (err) {
             setError(err.message || "An error occurred while unbookmarking the event")
         }
     }
@@ -285,6 +345,9 @@ export const useSpecificEvents = () => {
     // Register for event
     const handleRegisterEvent = async () => {
         if (!isClient || !isLoggedIn) return
+
+        // Optimistically update UI
+        setIsRegistered(true)
 
         try {
             const accessToken = localStorage.getItem("access_token")
@@ -298,7 +361,18 @@ export const useSpecificEvents = () => {
 
             const response = await registerToEventAction(payload)
 
+            // Handle token refresh
+            if (response.new_access_token) {
+                localStorage.setItem("access_token", response.new_access_token)
+            }
+            if (response.new_refresh_token) {
+                localStorage.setItem("refresh_token", response.new_refresh_token)
+            }
+
             if (!response.success) {
+                // Revert optimistic update on error
+                setIsRegistered(false)
+
                 if (response.statusCode === 401 || response.statusCode === 403) {
                     performLogout()
                     router.push('/login')
@@ -308,18 +382,11 @@ export const useSpecificEvents = () => {
                 return
             }
 
-            // Store new tokens if they were refreshed
-            if (response.new_access_token) {
-                localStorage.setItem("access_token", response.new_access_token)
-            }
-            if (response.new_refresh_token) {
-                localStorage.setItem("refresh_token", response.new_refresh_token)
-            }
-
-            setIsRegistered(true)
             // Fetch updated event data to get volunteer info
             await fetchSpecificEvent()
         } catch (err) {
+            // Revert optimistic update on error
+            setIsRegistered(false)
             setError(err.message || "An error occurred while registering for the event")
         }
     }
@@ -327,6 +394,9 @@ export const useSpecificEvents = () => {
     // Deregister from event
     const handleDeregisterEvent = async () => {
         if (!isClient || !isLoggedIn) return
+
+        // Optimistically update UI
+        setIsRegistered(false)
 
         try {
             const accessToken = localStorage.getItem("access_token")
@@ -340,7 +410,18 @@ export const useSpecificEvents = () => {
 
             const response = await deregisterFromEventAction(payload)
 
+            // Handle token refresh
+            if (response.new_access_token) {
+                localStorage.setItem("access_token", response.new_access_token)
+            }
+            if (response.new_refresh_token) {
+                localStorage.setItem("refresh_token", response.new_refresh_token)
+            }
+
             if (!response.success) {
+                // Revert optimistic update on error
+                setIsRegistered(true)
+
                 if (response.statusCode === 401 || response.statusCode === 403) {
                     performLogout()
                     router.push('/login')
@@ -350,18 +431,11 @@ export const useSpecificEvents = () => {
                 return
             }
 
-            // Store new tokens if they were refreshed
-            if (response.new_access_token) {
-                localStorage.setItem("access_token", response.new_access_token)
-            }
-            if (response.new_refresh_token) {
-                localStorage.setItem("refresh_token", response.new_refresh_token)
-            }
-
-            setIsRegistered(false)
             // Fetch updated event data to refresh volunteer count
             await fetchSpecificEvent()
         } catch (err) {
+            // Revert optimistic update on error
+            setIsRegistered(true)
             setError(err.message || "An error occurred while deregistering from the event")
         }
     }
