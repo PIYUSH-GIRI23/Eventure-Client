@@ -143,7 +143,7 @@ const HeaderView = ({
                                             }}
                                         >
                                             <Link
-                                                href="/account"
+                                                href={`/${type}`}
                                                 onClick={() => setProfileOpen(false)}
                                                 className="px-3 py-2 hover:opacity-80"
                                                 style={{ color: activeTheme.textColor }}
