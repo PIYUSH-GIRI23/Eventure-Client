@@ -215,7 +215,6 @@ const updateVolunteerController = async (payload) => {
         body: JSON.stringify(updateData),
         cache: 'no-store',
     });
-
     const data = await res.json();
     if(!res.ok) {
         const error = new Error(data.message || 'Fetch Failed');
