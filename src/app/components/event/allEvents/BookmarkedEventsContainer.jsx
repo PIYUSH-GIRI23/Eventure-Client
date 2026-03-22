@@ -21,6 +21,7 @@ const BookmarkedEventsContainer = () => {
   } = useBookmarkedEvents()
 
   const colorId = useSelector((state) => state.colorscheme.id)
+  const { username } = useSelector((state) => state.userdata)
   const activeTheme = colorSchemeOptions.find((option) => option.id === colorId) ?? colorSchemeOptions[0]
 
   if (!isClient) {
@@ -32,7 +33,7 @@ const BookmarkedEventsContainer = () => {
   }
 
   // Create sets for liked and bookmarked IDs from current events
-  const likedEventIds = new Set(events.filter(e => e.likes && e.likes.length > 0).map(e => e._id))
+  const likedEventIds = new Set(events.filter(e => e.likes && e.likes.some(l => l.username === username)).map(e => e._id))
   const bookmarkedEventIds = new Set(events.map(e => e._id))
 
   return (
