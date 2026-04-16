@@ -468,6 +468,7 @@ const SpecificEventsView = ({
                     onClose={() => setShowVolunteersModal(false)}
                     volunteers={event.volunteers}
                     activeTheme={activeTheme}
+                    eventData={event}
                 />
                 <ImageModal 
                     isOpen={showImageModal}

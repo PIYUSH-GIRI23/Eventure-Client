@@ -225,3 +225,31 @@ export async function deleteAccountAction(payload) {
         };  
     }
 }
+
+export async function getMultipleVolunteerDetailsAction(payload) {
+  try {
+    const data = await userController.getMultipleVolunteersDetails(payload);
+    
+    const response = {
+      success: true,
+      statusCode: 200,
+      data: {
+        volunteers: data.volunteers,
+        message: 'Volunteer details fetched successfully'
+      }
+    };
+
+    return response;
+  } 
+  catch (err) {
+    return {
+      success: false,
+      statusCode: err.statusCode || 500,
+      message: err.message || "An error occurred",
+      data: {
+        volunteers: [],
+        errors: []
+      }
+    };
+  }
+}

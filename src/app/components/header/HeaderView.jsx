@@ -116,13 +116,13 @@ const HeaderView = ({
                                     <BiBell size={20} />
                                 </button>
 
-                                <button
+                                {/* <button
                                     className="mx-2 cursor-pointer hover:opacity-80 transition-opacity"
                                     title="Chat"
                                     style={{ color: activeTheme.textColor }}
                                 >
                                     <BiMessage size={20} />
-                                </button>
+                                </button> */}
 
                                 {/* Profile Dropdown */}
                                 <div className="relative" ref={profileRef}>
