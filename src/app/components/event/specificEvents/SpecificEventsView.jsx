@@ -7,8 +7,9 @@ import { FiHeart, FiBookmark } from 'react-icons/fi'
 import { FaHeart, FaBookmark } from 'react-icons/fa'
 import { MdInfo } from 'react-icons/md'
 import { IoClose } from 'react-icons/io5'
-import { FiPlus } from 'react-icons/fi'
+import { FiPlus, FiDownload } from 'react-icons/fi'
 import formatDateTime from '@/app/utils/formatDateTime'
+import { generateEventPDF } from '@/app/utils/generateEventPDF'
 import Likes from './modal/Likes'
 import Bookmarked from './modal/Bookmarked'
 import Details from './modal/Details'
@@ -81,6 +82,10 @@ const SpecificEventsView = ({
         router.push(`/manager/${event.manager_username}`)
     }
 
+    const handleDownloadPoster = async () => {
+        await generateEventPDF(event)
+    }
+
     return (
         <div className="min-h-screen" style={{ backgroundColor: activeTheme.bgColor }}>
             <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8">
@@ -128,17 +133,40 @@ const SpecificEventsView = ({
                             >
                                 {isBookmarked ? <FaBookmark size={20} /> : <FiBookmark size={20} />}
                             </button>
+
+                            {/* Download Poster Button */}
+                            <button
+                                onClick={handleDownloadPoster}
+                                className="p-2 md:p-3 rounded-full transition-all duration-200 shadow-md hover:shadow-lg hover:opacity-80"
+                                style={{ backgroundColor: activeTheme.divColor, color: activeTheme.textColor }}
+                                title="Download event poster as PDF"
+                            >
+                                <FiDownload size={20} />
+                            </button>
                         </div>
                     </div>
 
                     {/* Event Title and Basic Info */}
                     <div className="mb-6">
-                        <h1 className="text-2xl md:text-4xl font-bold mb-2" style={{ color: activeTheme.textColor }}>
-                            {event.event_name}
-                        </h1>
-                        <p className="text-lg md:text-xl font-semibold mb-2" style={{ color: activeTheme.textColor2 }}>
-                            {event.title}
-                        </p>
+                        <div className="flex flex-col md:flex-row md:items-start md:justify-between md:gap-4 mb-4">
+                            <div className="flex-1">
+                                <h1 className="text-2xl md:text-4xl font-bold mb-2" style={{ color: activeTheme.textColor }}>
+                                    {event.event_name}
+                                </h1>
+                                <p className="text-lg md:text-xl font-semibold mb-2" style={{ color: activeTheme.textColor2 }}>
+                                    {event.title}
+                                </p>
+                            </div>
+                            <button
+                                onClick={handleDownloadPoster}
+                                className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-white transition-all hover:opacity-90 whitespace-nowrap"
+                                style={{ backgroundColor: activeTheme.textColor2 }}
+                                title="Download event details as PDF"
+                            >
+                                <FiDownload size={20} />
+                                Download Poster
+                            </button>
+                        </div>
                         <div className="flex flex-wrap gap-3 md:gap-4">
                             <div className="flex items-center gap-2">
                                 <span style={{ color: activeTheme.textColor2 }}>📅</span>
