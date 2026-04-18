@@ -13,7 +13,7 @@ const LoadingSpinner = () => {
         </div>
         
         <p className="text-gray-600 font-medium text-center">
-          <span className="inline-block">Processing</span>
+          <span className="inline-block">Loading</span>
         </p>
       </div>
     </div>
