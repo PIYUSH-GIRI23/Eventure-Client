@@ -49,7 +49,7 @@ const UpdateModal = ({
     }
 
     const handleSkillKeyDown = (e) => {
-        if (e.key === "Enter" || e.key === " ") {
+        if (e.key === "Enter") {
             e.preventDefault()
             addSkill(currentSkill)
         }
@@ -65,7 +65,7 @@ const UpdateModal = ({
                     startYear: "",
                     endYear: "",
                     percentage: "",
-                    specialization: ""
+                    specialization: ""                    
                 }
             ]
         }))
